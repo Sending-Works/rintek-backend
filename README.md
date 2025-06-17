@@ -86,6 +86,7 @@ rintek-backend/
 | PUT    | /api/kategori/:id           | Update kategori                          |
 | DELETE | /api/kategori/:id           | Hapus kategori                           |
 | POST   | /api/user-kategori          | Tambah user ke kategori (relasi)         |
+| GET    | /api/user-kategori/:userId  | Get Kategori user (relasi)       |
 
 ---
 
