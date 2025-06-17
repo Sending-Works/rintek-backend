@@ -1,4 +1,3 @@
-
 # 📆 Rintek Backend
 
 Backend API untuk aplikasi **RINTEK** (Ruang Interaktif Teknologi), dibangun dengan:
@@ -76,6 +75,7 @@ rintek-backend/
 |--------|------------------|-------------------------|
 | GET    | /api/users       | Ambil semua user        |
 | GET    | /api/users/:id   | Ambil user berdasarkan ID |
+| PATCH  | /api/users/:id/subscribe | Update tipe subscription user (`PRIBADI`/`KOMUNITAS`) |
 
 ### 🏷️ Kategori & Relasi
 | Method | Endpoint                    | Deskripsi                                |
@@ -86,7 +86,7 @@ rintek-backend/
 | PUT    | /api/kategori/:id           | Update kategori                          |
 | DELETE | /api/kategori/:id           | Hapus kategori                           |
 | POST   | /api/user-kategori          | Tambah user ke kategori (relasi)         |
-| GET    | /api/user-kategori/:userId  | Get Kategori user (relasi)       |
+| GET    | /api/user-kategori/:userId  | Ambil kategori yang diikuti oleh user    |
 
 ---
 
@@ -144,23 +144,42 @@ rintek-backend/
 ## ⚙️ Fitur Tambahan
 
 - Validasi input menggunakan `express-validator`
-- Response konsisten via `sendResponse.ts`
+- Response konsisten via `utils/sendResponse.ts`
 - Password dienkripsi dengan `bcrypt`
-- Global error handling dan keamanan (`helmet`, `compression`, `cors`)
+- Global error handling & middleware keamanan (`helmet`, `compression`, `cors`)
 
 ---
 
-## 📌 Catatan
+## 📌 Catatan Teknis
 
-- Kolom `type` pada kategori menggunakan enum PostgreSQL (`PRIBADI`, `KOMUNITAS`)
-- `slug` pada kategori wajib unik
-- Gunakan Supabase SQL editor untuk setup awal database (`CREATE TABLE` & `ENUM`)
+- Kolom `type` pada kategori menggunakan enum PostgreSQL: `PRIBADI`, `KOMUNITAS`
+- Nilai `slug` pada kategori wajib unik
+- Gunakan Supabase SQL Editor untuk setup awal skema database, misalnya:
+```sql
+CREATE TYPE tipeKategori AS ENUM ('PRIBADI', 'KOMUNITAS');
+CREATE TABLE kategori (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  name TEXT NOT NULL,
+  room_name TEXT,
+  room_desc TEXT,
+  slug TEXT UNIQUE,
+  type tipeKategori NOT NULL,
+  created_at TIMESTAMP DEFAULT now()
+);
+```
 
 ---
 
 ## 🚀 Deploy
 
-- App ini siap deploy ke Vercel menggunakan konfigurasi `api/index.ts` dan `vercel.json`
-- Endpoint tersedia via: `https://rintek-backend.vercel.app`
+- App ini siap deploy ke Vercel menggunakan struktur `api/index.ts` dan `vercel.json`
+- Semua endpoint tersedia di:  
+  👉 `https://rintek-backend.vercel.app`
+
+---
+
+## 👨‍💻 Kontributor
+
+- Deris Firmansyah — [@sendingworks](https://github.com/Sending-Works)
 
 ---
